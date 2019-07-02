@@ -1,7 +1,7 @@
 node  ('master') {
   checkout scm
   
-  stage("Build"){
+  stage('Build'){
     withMaven(maven: 'M3'){
       if (isUnix()){
         sh 'mvn -Dmaven.test.failure.ignore clean package'
@@ -12,7 +12,7 @@ node  ('master') {
     }
   }
 
-  stage("Results"){
+  stage('Results'){
     junit '**/target/surefire-reports/TEST-*.xml'
     archive 'target/*.jar'
   }
