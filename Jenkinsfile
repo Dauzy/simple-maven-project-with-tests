@@ -8,7 +8,8 @@ node ("master"){
 
   stage("Build"){
     if (isUnix()){
-      sh '${mvnTool}/bin/mvn -Dmaven.test.failure.ignore clean package'
+      sh 'echo ${mvnTool}'
+      //sh '${mvnTool}/bin/mvn -Dmaven.test.failure.ignore clean package'
     }
     else {
       bat '${mvnTool}/bin/mvn -Dmaven.test.failure.ignore clean package'
