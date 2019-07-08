@@ -1,27 +1,21 @@
-pipeline {
-  agent {
-    kubernetes {
-      label BUILD_TAG
-      containerTemplate {
-        name 'maven'
-        image 'maven'
-        command 'sleep'
-        args 'infinity'
-      }
-    }
+node ("master"){
+
+  def mvnHome
+
+  stage("Checkout SCM"){
+    checkout scm
   }
-  stages {
-    stage('Run') {
-      steps {
-        container('maven') {
-          sh 'mvn -B -ntp -Dmaven.test.failure.ignore verify'
-        }
-      }
-    }
+
+  stage("Build"){
+    mvnHome = tool 'M3'
+    sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
+
   }
-  post {
-    success {
-      junit '**/target/surefire-reports/TEST-*.xml'
-    }
+
+  stage("Results"){
+    junit '**/target/surefire-reports/TEST-*.xml'
+    archive 'target/*.jar'
   }
+
 }
+
