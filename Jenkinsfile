@@ -1,19 +1,15 @@
 node ("master"){
 
-  def mvnTool = tool 'M3'
+  def mvnHome
 
   stage("Checkout SCM"){
     checkout scm
   }
 
   stage("Build"){
-    if (isUnix()){
-      sh 'echo ${mvnTool}'
-      //sh '${mvnTool}/bin/mvn -Dmaven.test.failure.ignore clean package'
-    }
-    else {
-      bat '${mvnTool}/bin/mvn -Dmaven.test.failure.ignore clean package'
-    }
+    mvnHome = tool 'M3'
+    sh "'${mvnTool}/bin/mvn' -Dmaven.test.failure.ignore clean package"
+
   }
 
   stage("Results"){
